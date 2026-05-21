@@ -5,6 +5,7 @@ import java.util.Objects;
 /**
  * Value Object représentant un SKU (Stock Keeping Unit).
  * Immuable — validation non-null et non-vide dans le constructeur.
+ * equals/hashCode ignorent la casse.
  */
 public final class SKU {
 
@@ -12,7 +13,7 @@ public final class SKU {
 
     public SKU(String valeur) {
         if (valeur == null || valeur.isBlank()) {
-            throw new IllegalArgumentException("Le SKU ne peut pas être null ou vide");
+            throw new IllegalArgumentException("SKU invalide");
         }
         this.valeur = valeur;
     }
@@ -26,16 +27,16 @@ public final class SKU {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SKU sku = (SKU) o;
-        return Objects.equals(valeur, sku.valeur);
+        return valeur.equalsIgnoreCase(sku.valeur);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(valeur);
+        return Objects.hash(valeur.toLowerCase());
     }
 
     @Override
     public String toString() {
-        return "SKU{" + valeur + "}";
+        return valeur;
     }
 }

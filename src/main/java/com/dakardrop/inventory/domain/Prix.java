@@ -12,13 +12,24 @@ public final class Prix {
 
     public Prix(long montantXOF) {
         if (montantXOF <= 0) {
-            throw new IllegalArgumentException("Le prix doit être strictement positif, reçu : " + montantXOF);
+            throw new IllegalArgumentException("Prix doit être > 0");
         }
         this.montantXOF = montantXOF;
     }
 
     public long getMontantXOF() {
         return montantXOF;
+    }
+
+    /**
+     * Applique une réduction en pourcentage et retourne un nouveau Prix.
+     *
+     * @param pourcentage le pourcentage de réduction (ex: 15.0 pour 15%)
+     * @return un nouveau Prix avec la réduction appliquée
+     */
+    public Prix appliquerReduction(double pourcentage) {
+        long nouveauMontant = (long) (montantXOF * (1 - pourcentage / 100));
+        return new Prix(Math.max(nouveauMontant, 1));
     }
 
     @Override
