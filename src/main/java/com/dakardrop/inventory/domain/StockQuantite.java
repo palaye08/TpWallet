@@ -1,10 +1,12 @@
 package com.dakardrop.inventory.domain;
 
+import com.dakardrop.shared.StockInsuffisantException;
+
 import java.util.Objects;
 
 /**
  * Value Object représentant une quantité en stock.
- * Immuable — la quantité doit être >= 0, lève une exception si < 0.
+ * Immuable — la quantité doit être >= 0, lève StockInsuffisantException si < 0.
  */
 public final class StockQuantite {
 
@@ -12,7 +14,7 @@ public final class StockQuantite {
 
     public StockQuantite(int quantite) {
         if (quantite < 0) {
-            throw new IllegalArgumentException("La quantité en stock ne peut pas être négative, reçu : " + quantite);
+            throw new StockInsuffisantException("Stock négatif interdit : " + quantite);
         }
         this.quantite = quantite;
     }
@@ -30,10 +32,20 @@ public final class StockQuantite {
 
     /**
      * Retourne un nouveau StockQuantite avec la quantité retirée.
-     * Lève IllegalArgumentException si le résultat serait négatif.
+     * Lève StockInsuffisantException si le résultat serait négatif.
      */
     public StockQuantite retirer(int qte) {
         return new StockQuantite(this.quantite - qte);
+    }
+
+    /**
+     * Vérifie si la quantité est en dessous d'un seuil donné.
+     *
+     * @param seuil le seuil critique
+     * @return true si la quantité est strictement inférieure au seuil
+     */
+    public boolean estSousSeuil(int seuil) {
+        return this.quantite < seuil;
     }
 
     @Override
